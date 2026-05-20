@@ -1,0 +1,19 @@
+# Python
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+htmlcov/
+.eggs/
+dist/
+.tox/
+.mypy_cache/
+.coverage
+.venv/
+.cache/
+.Python
+.idea/
+venv/
+*.swp
