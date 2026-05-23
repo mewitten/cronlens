@@ -38,6 +38,22 @@ describe('serializeExport / deserializeExport', () => {
       'Invalid export file'
     );
   });
+
+  it('throws on malformed JSON', () => {
+    expect(() => deserializeExport('not-valid-json')).toThrow();
+  });
+
+  it('preserves exportedAt timestamp through round-trip', () => {
+    const exportedAt = '2024-06-15T12:00:00.000Z';
+    const data: ExportData = {
+      version: '1.0.0',
+      exportedAt,
+      favorites: [],
+      jobs: [],
+    };
+    const result = deserializeExport(serializeExport(data));
+    expect(result.exportedAt).toBe(exportedAt);
+  });
 });
 
 describe('buildExportData', () => {
@@ -68,5 +84,10 @@ describe('exportToFile / importFromFile', () => {
     const imported = await importFromFile(filePath);
     expect(imported.version).toBe('1.0.0');
     expect(imported.favorites).toEqual(mockFavorites);
+  });
+
+  it('throws when importing from a non-existent file', async () => {
+    const filePath = path.join(tmpDir, 'does-not-exist.json');
+    await expect(importFromFile(filePath)).rejects.toThrow();
   });
 });
